@@ -97,3 +97,116 @@ dtype: float64
 Let's stop here for now and move on to DataFrames, which will expand on the concept of Series!
 
 Great Job!
+
+
+
+
+
+Conditional Selection
+An important feature of pandas is conditional selection using bracket notation, very similar to numpy:
+
+df
+    W  	        X	        Y	        Z
+A	2.706850	0.628133	0.907969	0.503826
+B	0.651118	-0.319318	-0.848077	0.605965
+C	-2.018168	0.740122	0.528813	-0.589001
+D	0.188695	-0.758872	-0.933237	0.955057
+E	0.190794	1.978757	2.605967	0.683509
+
+df>0
+    W    	X	    Y	    Z
+A	True	True	True	True
+B	True	False	False	True
+C	False	True	True	False
+D	True	False	False	True
+E	True	True	True	True
+
+df[df>0]
+    W          	X	        Y	        Z
+A	2.706850	0.628133	0.907969	0.503826
+B	0.651118	NaN	NaN	0.605965
+C	NaN	0.740122	0.528813	NaN
+D	0.188695	NaN	NaN	0.955057
+E	0.190794	1.978757	2.605967	0.683509
+
+df[df['W']>0]
+      W	        X	        Y	        Z
+A	2.706850	0.628133	0.907969	0.503826
+B	0.651118	-0.319318	-0.848077	0.605965
+D	0.188695	-0.758872	-0.933237	0.955057
+E	0.190794	1.978757	2.605967	0.683509
+
+df[df['W']>0]['Y']
+A    0.907969
+B   -0.848077
+D   -0.933237
+E    2.605967
+Name: Y, dtype: float64
+
+df[df['W']>0][['Y','X']]
+      Y	        X
+A	0.907969	0.628133
+B	-0.848077	-0.319318
+D	-0.933237	-0.758872
+E	2.605967	1.978757
+For two conditions you can use | and & with parenthesis:
+
+df[(df['W']>0) & (df['Y'] > 1)]
+      W        	X	        Y	        Z
+E	0.190794	1.978757	2.605967	0.683509
+More Index Details
+Let's discuss some more features of indexing, including resetting the index or setting it something else. We'll also talk about index hierarchy!
+
+df
+      W	        X	        Y	        Z
+A	2.706850	0.628133	0.907969	0.503826
+B	0.651118	-0.319318	-0.848077	0.605965
+C	-2.018168	0.740122	0.528813	-0.589001
+D	0.188695	-0.758872	-0.933237	0.955057
+E	0.190794	1.978757	2.605967	0.683509
+
+# Reset to default 0,1...n index
+df.reset_index()
+index	W	          X	        Y	        Z
+0	A	2.706850	0.628133	0.907969	0.503826
+1	B	0.651118	-0.319318	-0.848077	0.605965
+2	C	-2.018168	0.740122	0.528813	-0.589001
+3	D	0.188695	-0.758872	-0.933237	0.955057
+4	E	0.190794	1.978757	2.605967	0.683509
+
+newind = 'CA NY WY OR CO'.split()
+df['States'] = newind
+df
+      W	        X	        Y	         Z	States
+A	2.706850	0.628133	0.907969	0.503826	CA
+B	0.651118	-0.319318	-0.848077	0.605965	NY
+C	-2.018168	0.740122	0.528813	-0.589001	WY
+D	0.188695	-0.758872	-0.933237	0.955057	OR
+E	0.190794	1.978757	2.605967	0.683509	CO
+
+df.set_index('States')
+        W        	X	        Y	        Z
+States				
+CA	2.706850	0.628133	0.907969	0.503826
+NY	0.651118	-0.319318	-0.848077	0.605965
+WY	-2.018168	0.740122	0.528813	-0.589001
+OR	0.188695	-0.758872	-0.933237	0.955057
+CO	0.190794	1.978757	2.605967	0.683509
+df
+
+      W        	X	        Y	        Z	States
+A	2.706850	0.628133	0.907969	0.503826	CA
+B	0.651118	-0.319318	-0.848077	0.605965	NY
+C	-2.018168	0.740122	0.528813	-0.589001	WY
+D	0.188695	-0.758872	-0.933237	0.955057	OR
+E	0.190794	1.978757	2.605967	0.683509	CO
+
+df.set_index('States',inplace=True)
+df
+        W        	X        	Y	        Z
+States				
+CA	2.706850	0.628133	0.907969	0.503826
+NY	0.651118	-0.319318	-0.848077	0.605965
+WY	-2.018168	0.740122	0.528813	-0.589001
+OR	0.188695	-0.758872	-0.933237	0.955057
+CO	0.190794	1.978757	2.605967	0.683509
