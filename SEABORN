@@ -1,0 +1,71 @@
+Distribution Plots
+Let's discuss some plots that allow us to visualize the distribution of a data set. These plots are:
+
+distplot
+jointplot
+pairplot
+rugplot
+kdeplot
+Imports
+import seaborn as sns
+%matplotlib inline
+Data
+Seaborn comes with built-in data sets!
+
+tips = sns.load_dataset('tips')
+tips.head()
+total_bill	tip	sex	smoker	day	time	size
+0	16.99	1.01	Female	No	Sun	Dinner	2
+1	10.34	1.66	Male	No	Sun	Dinner	3
+2	21.01	3.50	Male	No	Sun	Dinner	3
+3	23.68	3.31	Male	No	Sun	Dinner	2
+4	24.59	3.61	Female	No	Sun	Dinner	4
+distplot
+The distplot shows the distribution of a univariate set of observations.
+
+sns.distplot(tips['total_bill'],kde= False)
+# Safe to ignore warnings
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+Cell In[1], line 1
+----> 1 sns.distplot(tips['total_bill'],kde= False)
+
+NameError: name 'sns' is not defined
+
+To remove the kde layer and just have the histogram use:
+
+sns.distplot(tips['total_bill'],kde=False,bins=30)
+<matplotlib.axes._subplots.AxesSubplot at 0x11c7b8668>
+
+jointplot
+jointplot() allows you to basically match up two distplots for bivariate data. With your choice of what kind parameter to compare with:
+
+“scatter”
+“reg”
+“resid”
+“kde”
+“hex”
+sns.jointplot(x='total_bill',y='tip',data=tips,kind='scatter')
+<seaborn.axisgrid.JointGrid at 0x11cfb28d0>
+
+sns.jointplot(x='total_bill',y='tip',data=tips,kind='hex')
+<seaborn.axisgrid.JointGrid at 0x11d96f160>
+
+sns.jointplot(x='total_bill',y='tip',data=tips,kind='reg')
+/Users/marci/anaconda/lib/python3.5/site-packages/statsmodels/nonparametric/kdetools.py:20: VisibleDeprecationWarning: using a non-integer number instead of an integer will result in an error in the future
+  y = X[:m/2+1] + np.r_[0,X[m/2+1:],0]*1j
+<seaborn.axisgrid.JointGrid at 0x11e0cfba8>
+
+pairplot
+pairplot will plot pairwise relationships across an entire dataframe (for the numerical columns) and supports a color hue argument (for categorical columns).
+
+sns.pairplot(tips)
+<seaborn.axisgrid.PairGrid at 0x11e844208>
+
+sns.pairplot(tips,hue='sex',palette='coolwarm')
+<seaborn.axisgrid.PairGrid at 0x11ff7a828>
+
+rugplot
+rugplots are actually a very simple concept, they just draw a dash mark for every point on a univariate distribution. They are the building block of a KDE plot:
+
+sns.rugplot(tips['total_bill'])
